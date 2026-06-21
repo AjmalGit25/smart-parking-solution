@@ -1,11 +1,7 @@
 # Dependencies
 node_modules/
 
-# Build output
-dist/
-dist-ssr/
-
-# Environment variables
+# Environment variables — never push secrets
 .env
 .env.local
 .env.*.local
@@ -16,19 +12,13 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
 # Runtime / OS
 .DS_Store
 Thumbs.db
 
 # Editor
-.vscode/*
-!.vscode/extensions.json
+.vscode/
 .idea/
 *.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
