@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import StarBackground from '../components/StarBackground';
 
 export default function Login() {
   const { login } = useAuth();
@@ -12,6 +13,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(form.email, form.password);
+      toast.success('Logged in successfully!');
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
@@ -19,10 +21,11 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[80vh]">
+    <div className="relative flex justify-center items-center min-h-[80vh]">
+      <StarBackground />
       <form
         onSubmit={handleSubmit}
-        className="bg-slate-800 border border-slate-700 rounded-2xl p-8 w-full max-w-sm flex flex-col gap-4 shadow-xl"
+        className="relative z-10 bg-slate-800/70 backdrop-blur-md border border-slate-700 rounded-2xl p-8 w-full max-w-sm flex flex-col gap-4 shadow-xl"
       >
         <h2 className="text-2xl font-bold text-center text-white">Welcome back</h2>
         <p className="text-slate-400 text-sm text-center -mt-2">Sign in to your account</p>
@@ -33,7 +36,7 @@ export default function Login() {
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
-          className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+          className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors [box-shadow:inset_0_2px_6px_rgba(0,0,0,0.5)]"
         />
         <input
           type="password"
@@ -41,7 +44,7 @@ export default function Login() {
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           required
-          className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+          className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors [box-shadow:inset_0_2px_6px_rgba(0,0,0,0.5)]"
         />
         <button
           type="submit"
