@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import Spinner from '../components/Spinner';
 
 const STATUS_COLOR = {
   available: 'bg-green-500 hover:scale-105',
@@ -20,6 +21,7 @@ export default function Dashboard() {
   const [slots, setSlots] = useState([]);
   const [selected, setSelected] = useState(null);
   const [vehicle, setVehicle] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchSlots = async () => {
     const { data } = await api.get('/slots');
@@ -29,12 +31,16 @@ export default function Dashboard() {
   useEffect(() => { fetchSlots(); }, []);
 
   const handleSeed = async () => {
+    setLoading(true);
+
     try {
       const { data } = await api.post('/slots/seed');
       toast.success(data.message);
       fetchSlots();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Seed failed');
+    } finally {
+      setLoading(false); // ✅ After request completes
     }
   };
 
@@ -81,34 +87,41 @@ export default function Dashboard() {
       </div>
 
       {/* Floors */}
-      {floors.map((floor) => (
-        <div key={floor} className="mb-10">
-          <h3 className="text-slate-400 font-semibold mb-4 flex items-center gap-2">
-            <span className="bg-slate-700 text-white text-xs px-2 py-1 rounded">Floor {floor}</span>
-          </h3>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(88px,1fr))] gap-3">
-            {slots
-              .filter((s) => s.floor === floor)
-              .map((slot) => (
-                <button
-                  key={slot._id}
-                  onClick={() => slot.status === 'available' && setSelected(slot)}
-                  title={`${slot.type} — ${slot.status}`}
-                  className={`flex flex-col items-center justify-center gap-0.5 min-h-18 rounded-xl text-white font-semibold text-sm transition-transform ${STATUS_COLOR[slot.status]}`}
-                >
-                  <span>{slot.slotNumber}</span>
-                  <span className="text-[10px] font-normal opacity-85 capitalize">{slot.type}</span>
-                </button>
-              ))}
-          </div>
+      {loading ? (
+        <div className="flex flex-col items-center justify-center gap-5 py-20">
+          <Spinner />
+          <p className='text-white'>Seeding ...</p>
         </div>
-      ))}
-
-      {slots.length === 0 && (
+      ) : slots.length === 0 ? (
         <div className="text-center py-20 text-slate-500">
           <p className="text-4xl mb-3">🅿️</p>
           <p>No slots yet.{user?.role === 'admin' ? ' Click "Seed Slots" to get started.' : ' Ask an admin to seed the slots.'}</p>
         </div>
+      ) : (
+        <>
+          {floors.map((floor) => (
+            <div key={floor} className="mb-10">
+              <h3 className="text-slate-400 font-semibold mb-4 flex items-center gap-2">
+                <span className="bg-slate-700 text-white text-xs px-2 py-1 rounded">Floor {floor}</span>
+              </h3>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(88px,1fr))] gap-3">
+                {slots
+                  .filter((s) => s.floor === floor)
+                  .map((slot) => (
+                    <button
+                      key={slot._id}
+                      onClick={() => slot.status === 'available' && setSelected(slot)}
+                      title={`${slot.type} — ${slot.status}`}
+                      className={`flex flex-col items-center justify-center gap-0.5 min-h-18 rounded-xl text-white font-semibold text-sm transition-transform ${STATUS_COLOR[slot.status]}`}
+                    >
+                      <span>{slot.slotNumber}</span>
+                      <span className="text-[10px] font-normal opacity-85 capitalize">{slot.type}</span>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          ))}
+        </>
       )}
 
       {/* Booking Modal */}
