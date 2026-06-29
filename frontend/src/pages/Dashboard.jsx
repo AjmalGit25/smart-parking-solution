@@ -5,14 +5,14 @@ import { useAuth } from '../context/AuthContext';
 
 const STATUS_COLOR = {
   available: 'bg-green-500 hover:scale-105',
-  occupied:  'bg-red-500 cursor-not-allowed opacity-75',
-  reserved:  'bg-amber-500 cursor-not-allowed opacity-75',
+  occupied: 'bg-red-500 cursor-not-allowed opacity-75',
+  reserved: 'bg-amber-500 cursor-not-allowed opacity-75',
 };
 
 const LEGEND = [
   { label: 'Available', cls: 'bg-green-500' },
-  { label: 'Occupied',  cls: 'bg-red-500' },
-  { label: 'Reserved',  cls: 'bg-amber-500' },
+  { label: 'Occupied', cls: 'bg-red-500' },
+  { label: 'Reserved', cls: 'bg-amber-500' },
 ];
 
 export default function Dashboard() {
@@ -52,6 +52,8 @@ export default function Dashboard() {
   };
 
   const floors = [...new Set(slots.map((s) => s.floor))].sort();
+
+  const inputCls = 'bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors [box-shadow:inset_0_2px_6px_rgba(0,0,0,0.7)]';
 
   return (
     <div>
@@ -131,7 +133,7 @@ export default function Dashboard() {
               value={vehicle}
               onChange={(e) => setVehicle(e.target.value)}
               required
-              className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+              className={inputCls}
             />
             <div className="flex gap-3 mt-1">
               <button
