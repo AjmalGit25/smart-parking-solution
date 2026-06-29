@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import StarBackground from '../components/StarBackground';
 
-const inputCls = 'bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors [box-shadow:inset_0_2px_6px_rgba(0,0,0,0.5)]';
+const inputCls = 'bg-slate-900 border border-slate-600 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 transition-colors [box-shadow:inset_0_2px_6px_rgba(0,0,0,0.7)]';
 
 export default function Register() {
   const { register } = useAuth();
